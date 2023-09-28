@@ -1,0 +1,136 @@
+---
+title: "Verify Transaction"
+api: "GET https://paywithbank3d.com/api/payment/verify/{reference}"
+description: "This endpoint is used to verify a payment transaction with a reference ID."
+---
+
+### Path Parameter
+
+<ParamField path="reference" type="string">
+ A unique reference ID associated with the payment transaction.
+</ParamField>
+
+### Response
+
+<ResponseField name="hmac" type="string">
+  A crytographic hash(HMAC) representing the integrity of the data. 
+</ResponseField>
+
+<ResponseField name="mode" type="string">
+  Indicates the mode, which is set to "dev" in this case. 
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Represents the status of the transaction, which is either "SUCCESSFUL" or "FAILED"
+</ResponseField>
+
+<ResponseField name="code" type="string">
+  A code associated with the transaction status 
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  A description of the transaction status, indicating it was "Approved by 
+  Financial Institution." 
+</ResponseField>
+
+<ResponseField name="amount" type="number">
+  The transaction amount (currency is specified in Kobo)
+</ResponseField>
+
+<ResponseField name="merchantRef" type="string">
+  A reference associated with the merchant
+</ResponseField>
+
+<ResponseField name="transactionRef" type="string">
+  A reference for the transaction. 
+</ResponseField>
+
+<ResponseField name="paymentRef" type="string">
+  A payment reference related to the transaction
+</ResponseField>
+
+<ResponseField name="currencyCode" type="string">
+  The currency code for the transaction, which is "NGN" (Nigerian Naira)
+</ResponseField>
+
+<ResponseField name="data" type="object">
+
+An object containing additional data related to the transaction: 
+
+<Expandable title="object content">
+
+<ResponseField name="pan" type="string">
+  don't know what this is 
+</ResponseField>
+
+<ResponseField name="token" type="string">
+  Card expiry date 
+</ResponseField>
+
+<ResponseField name="expiryDate" type="string">
+  Card expiry date in ISO 8601 format, including the time. 
+</ResponseField>
+
+</Expandable>
+
+<ResponseField name="option" type="string">
+  Specifies the payment option used, which is "card."
+</ResponseField>
+
+<ResponseField name="nextAction" type="string">
+  Indicates the next action to be taken, which is "APPROVE."
+</ResponseField>
+
+<ResponseField name="transactionDate" type="string">
+  The date and time of the transaction in ISO 8601 format 
+</ResponseField>
+
+<ResponseField name="paymentDate" type="string">
+  The date and time when the payment was made in ISO 8601 format. 
+</ResponseField>
+
+</ResponseField>
+
+
+
+<RequestExample>
+
+
+
+```bash Example Request
+curl --location --request GET 'https://paywithbank3d.com/api/payment/verify/reference \' 
+--header 'Content-Type: application/json' \
+--header 'Authorization: Token <token>' \
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+ "hmac":
+"feffc947c4a88cc1d91d5d3e7c3392838f0e50502bd3a7f8313d7854a9632714",
+ "mode": "dev",
+
+"status": "SUCCESSFUL",
+"code": "00",
+ "description": "Approved by Financial Institution",
+ "amount": 4000000,
+ "merchantRef": "WQ-506391000507913",
+ "transactionRef": "0000000000000044177",
+ "paymentRef": "330137174040",
+ "currencyCode": "NGN",
+ "data": {
+ "pan": "501501******5015",
+ "expiry": "01/30",
+ "expiryDate": "2030-01-31T23:59:00.000"
+ },
+ "option": "card",
+ "nextAction": "APPROVE",
+ "transactionDate": "2022-11-14T22:33:37.833Z",
+ "paymentDate": "2022-11-14T22:34:24.913Z"
+}
+```
+
+</ResponseExample>
