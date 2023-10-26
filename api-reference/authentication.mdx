@@ -3,20 +3,19 @@ title: "Authentication"
 description: "Example overview page before API endpoints"
 ---
 
-- The authorization header must contain your secret API key as a bearer token.
+- This end-point make use of basic authentication.
+- the header of your API request should contain the `client-id` and `client-secret` 
 - The content-type header must be application/json.
 - The request body must be in valid JSON format.
-- All endpoints require authentication with your API keys.
+- The verification transaction endpoint require authentication with your `client-id` and `client-secret`.
 
 
 
 ```bash
-'Authorization': 'Token <team_token>'
+'Authorization': 'Basic <client-id:client-secret>'
 ```
 
-## API Tokens
 
-To generate token, you'll need a `clientID` and `secretkey`
 
 ## Signature Validation 
 
