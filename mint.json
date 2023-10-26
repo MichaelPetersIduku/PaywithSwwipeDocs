@@ -8,10 +8,13 @@
     "api": {
       "baseUrl": "https://staging.paywithbank3d.com/", 
       "auth": {
-        "method": "basic" 
+        "method": "basic",
+        "name": "client-id:client-secret"
+        
+      
       }
     },
-  "favicon": "/favicon.png",
+  "favicon": "/logo/logo-dark.svg",
   "colors": {
     "primary": "#9563FF",
     "light": "#AE87FF",
