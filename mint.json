@@ -1,8 +1,8 @@
 {
   "name": "Swwipe",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/logo-dark.svg",
+    "light": "/logo/logo-light.svg"
   },
 
     "api": {
