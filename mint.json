@@ -9,7 +9,7 @@
     "api": {
       "baseUrl": "https://staging.paywithbank3d.com/", 
       "auth": {
-        "method": "bearer" 
+        "method": "basic" 
       }
     },
   "favicon": "/favicon.png",
