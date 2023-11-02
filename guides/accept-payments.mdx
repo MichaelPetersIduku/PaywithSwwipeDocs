@@ -4,11 +4,15 @@ description: 'you can use our client Javascript library, to accept payment from 
 icon: 'code'
 ---
 
-## Swwipe Pay 
+## SwwipePay 
 
-Net Pay library provides a simple and convenient payment flow for web. It can be integrated in easy steps, making it the easiest way to start accepting payments.
-you can make use of the net pay library by using Netpay [CND](https://parkwaycdnstorage.blob.core.windows.net/bank3d/bank3d.min.js). 
+SwwipePay library provides a simple and convenient payment flow for web. It can be integrated in easy steps, making it the easiest way to start accepting payments.
+you can make use of the SwwipePay CDN.
 
+```
+https://parkwaycdnstorage.blob.core.windows.net/bank3d/bank3d.min.js
+
+```
 ### Collecting Customer Information 
 
 To initialize the transaction, you need to pass information such as `email`, `amount`, transaction `reference`, etc.
@@ -74,8 +78,8 @@ The customer information can be retrieved from a database if you already have it
 <script src="https://parkwaycdnstorage.blob.core.windows.net/bank3d/bank3d.min.js"></script>
 ```
 
-To use netpay, you simply call the createPayment method on the netpay library passing in the payment options object. This returns an instance of a payment. 
-To open the netpay window, call the open method on the payment object
+To use SwwipePay, you simply call the createPayment method on the SwwipePay library passing in the payment options object. This returns an instance of a payment. 
+To open the SwwipePay window, call the open method on the payment object
 
 ```js index.js 
 // Create the payment instance
