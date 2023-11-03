@@ -1,12 +1,11 @@
 ---
 title: "Authentication"
-description: "Example overview page before API endpoints"
+description: "Authentication Overview"
 ---
 
 - This end-point make use of basic authentication.
 - the header of your API request should contain the `client-id` and `client-secret` 
 - The content-type header must be application/json.
-- The request body must be in valid JSON format.
 - The verification transaction endpoint require authentication with your `client-id` and `client-secret`.
 
 
@@ -58,4 +57,4 @@ public static string HexHMACHash256(string value, string maggi) {
 ```
 
 In the provided function, `value` should be constructed as the concatenation of`MerchantRef`, `CurrencyCode`, and `Amount`, while `maggi` represents the MerchantSecret key. 
-By calling this function and comparing the result with the HMAC property received from Bank3D, you can ensure the authenticity and integrity of the data before proceeding with transaction processing.
+By calling this function and comparing the result with the HMAC property received from SwwipePay, you can ensure the authenticity and integrity of the data before proceeding with transaction processing.
