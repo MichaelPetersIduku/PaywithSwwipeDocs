@@ -1,22 +1,60 @@
 ---
 title: "Authentication"
-description: "Example overview page before API endpoints"
+description: "Authentication Overview"
 ---
 
-- The authorization header must contain your secret API key as a bearer token.
+- This end-point make use of basic authentication.
+- the header of your API request should contain the `client-id` and `client-secret` 
 - The content-type header must be application/json.
-- The request body must be in valid JSON format.
-- All endpoints require authentication with your API keys.
+- The verification transaction endpoint require authentication with your `client-id` and `client-secret`.
 
 
 
 ```bash
-'Authorization': 'Token <team_token>'
+'Authorization': 'Basic <client-id:client-secret>'
 ```
 
-## API Tokens
 
-To generate token, you'll need a `clientID` and `secretkey`
 
 ## Signature Validation 
 
+### Overview
+
+Signature validation is a crucial step in processing events or responses received from Swwipe. 
+These entities carry a payload that includes an `HMAC` (Hash-based Message Authentication Code) property. 
+The purpose of this property is to ensure the integrity and authenticity of the data transmitted. The `HMAC` property is generated as a Hexadecimal `HMAC256` hash, 
+computed based on a combination of parameters, including `MerchantRef`, `CurrencyCode`, and `Amount`, using the `MerchantSecret` as the secret key.
+
+### Verifying HMAC Property
+
+Before proceeding with the processing of any transaction, it is imperative to validate the `HMAC` 
+property to confirm the data's integrity and origin. The following section provides a sample function that
+ can be used to obtain the HMAC value for verification.
+
+ Sample Function: `HexHMACHash256`
+
+The`HexHMACHash256` function is used to calculate the `HMAC256` hash for a given input value using the provided `MerchantSecret` key.
+It is crucial to construct the input value as the concatenation of `MerchantRef`, `CurrencyCode`, and `Amount`.
+
+```csharp
+public static string HexHMACHash256(string value, string maggi) {
+    // Convert the MerchantSecret key to bytes
+    byte[] keyByte = Encoding.UTF8.GetBytes(maggi);
+    
+    // Convert the input value to bytes
+    byte[] messageBytes = Encoding.UTF8.GetBytes(value);
+    
+    // Initialize an HMACSHA256 hasher with the key
+    using (var hasher = new HMACSHA256(keyByte)) {
+        // Compute the hash
+        byte[] hashMessage = hasher.ComputeHash(messageBytes);
+        
+        // Convert the hash to a Hexadecimal string format
+        return BitConverter.ToString(hashMessage).Replace("-", "").ToLower();
+    }
+}
+
+```
+
+In the provided function, `value` should be constructed as the concatenation of`MerchantRef`, `CurrencyCode`, and `Amount`, while `maggi` represents the MerchantSecret key. 
+By calling this function and comparing the result with the HMAC property received from SwwipePay, you can ensure the authenticity and integrity of the data before proceeding with transaction processing.

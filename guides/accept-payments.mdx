@@ -1,14 +1,18 @@
 ---
 title: 'Accepting Payments'
-description: 'you can use our client Javascript library, Nepay-lib, or our SDKs'
+description: 'you can use our client Javascript library, to accept payment from customers'
 icon: 'code'
 ---
 
-## Net Pay 
+## SwwipePay 
 
-Net Pay library provides a simple and convenient payment flow for web. It can be integrated in easy steps, making it the easiest way to start accepting payments.
-you can install the net pay library by following this [link](https://www.npmjs.com/package/netpay-lib). 
+SwwipePay library provides a simple and convenient payment flow for web. It can be integrated in easy steps, making it the easiest way to start accepting payments.
+you can make use of the SwwipePay CDN.
 
+```
+https://parkwaycdnstorage.blob.core.windows.net/bank3d/bank3d.min.js
+
+```
 ### Collecting Customer Information 
 
 To initialize the transaction, you need to pass information such as `email`, `amount`, transaction `reference`, etc.
@@ -17,12 +21,12 @@ To initialize the transaction, you need to pass information such as `email`, `am
 
  | Param          | Required | Description                                                                                                                                                             |
 | :------------- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `merchantKey`  | Yes      | Your public key from Swwipe. Use test key for test mode and live key for live mode                                                                                      |
+| `merchantKey`  | Yes      | Your SwwipePay merchant key. Use test key for test mode and live key for live mode                                                                                        |
 | `email`        | Yes      | Email address of customer                                                                                                                                               |
 | `amount`       | Yes      | Amount(in  the lowest currency value -kobo) you are debiting customer.                                                                                                  |
-| reference      | Yes      | Unique case sensitive transaction reference. If you do not pass this parameter, Swwipe will generate a unique reference for you.                                        |
+| reference      | Yes      | Unique case sensitive transaction reference. If you do not pass this parameter, SwwipePay will generate a unique reference for you.                                        |
 | `currencyCode` | No       | Currency charge should be performed in. Allowed value is: `NGN`                                                                                                         |
-| `callback`     | No       | Function that runs when a payment is successful. This should ideally be a script that uses the verify endpoint on the Swwipe API to check the status of the transaction |
+| `callback`     | No       | Function that runs when a payment is successful. This should ideally be a script that uses the verify endpoint on the SwwipePay API to check the status of the transaction |
 | `onClose`      | No       | JavaScript function that is called if the customer closes the payment window instead of making payment.                                                                 |
 
 
@@ -71,11 +75,11 @@ The customer information can be retrieved from a database if you already have it
 
 </form>
 
-<script src="https://unpkg.com/netpay-lib@latest/umd/netpay.min.js"></script>
+<script src="https://parkwaycdnstorage.blob.core.windows.net/bank3d/bank3d.min.js"></script>
 ```
 
-To use netpay, you simply call the createPayment method on the netpay library passing in the payment options object. This returns an instance of a payment. 
-To open the netpay window, call the open method on the payment object
+To use SwwipePay, you simply call the createPayment method on the SwwipePay library passing in the payment options object. This returns an instance of a payment. 
+To open the SwwipePay window, call the open method on the payment object
 
 ```js index.js 
 // Create the payment instance
@@ -116,13 +120,13 @@ payment.open();
 In the sample code above, notice how:
 
 1. The `pay` button has been tied to an `onClick` function called `payWithSwwipe`. 
-This is the action that causes the Swwipe library popup to load.
+This is the action that causes SwwipePay library popup to load.
 
 
 ### Initialize transaction
 
 When you have all the details needed to initiate the transaction,
- the next step is to tie them to the JavaScript function that passes them to Netpay and displays the checkout popup modal.
+ the next step is to tie them to the JavaScript function that passes them to SwwipePay and displays the checkout popup modal.
 
  ```js initialize
  // Create the payment instance
@@ -150,7 +154,7 @@ payment.open();
 
  ### Important Notes 
 
- 1. the `merchantKey` field here takes your Swwipe **_public_**key. 
+ 1. the `merchantKey` field here takes your SwwipePay **_public_**key. 
 2. The `amount` field has to be converted to the lowest currency unit by multiplying the value by `100` so if you wanted to charge** N50**, you have to multiply** 50 \* 100** and pass **5000** in the amount field.
 3. It's ideal to generate a unique `reference` from your system for every transaction to avoid duplicate attempts. 
 4. The `callback` method is called when payment has been completed successfully on the Bank3D checkout. See the next section to see how to hand the callback. 
@@ -181,7 +185,7 @@ callback: function(resonse){
 ### Verify the transaction status
 
 After payment is made, the next step is to confirm the status of the transaction. A  transaction can be confirmed by the verify transactions endpoint. 
-To verify the transaction, you must set up a route or page on your server that you pass the reference to. Then from your server, you call the Swwipe verify endpoint to confirm the status of the transaction, and response is returned to your fronted. 
+To verify the transaction, you must set up a route or page on your server that you pass the reference to. Then from your server, you calls SwwipePay verify endpoint to confirm the status of the transaction, and response is returned to your fronted. 
 The following parameters are needed to confirm if you should deliver value to your customer or not:
 
 | Parameter     | Description                                                                                                              |
