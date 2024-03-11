@@ -21,12 +21,12 @@ To initialize the transaction, you need to pass information such as `email`, `am
 
  | Param          | Required | Description                                                                                                                                                             |
 | :------------- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `merchantKey`  | Yes      | Your SwwipePay merchant key. Use test key for test mode and live key for live mode                                                                                        |
+| `merchantKey`  | Yes      | Your public key from PaywithSwwipe. Use test key for test mode and live key for live mode                                                                                      |
 | `email`        | Yes      | Email address of customer                                                                                                                                               |
 | `amount`       | Yes      | Amount(in  the lowest currency value -kobo) you are debiting customer.                                                                                                  |
-| reference      | Yes      | Unique case sensitive transaction reference. If you do not pass this parameter, SwwipePay will generate a unique reference for you.                                        |
+| reference      | Yes      | Unique case sensitive transaction reference. If you do not pass this parameter, PaywithSwwipe will generate a unique reference for you.                                        |
 | `currencyCode` | No       | Currency charge should be performed in. Allowed value is: `NGN`                                                                                                         |
-| `callback`     | No       | Function that runs when a payment is successful. This should ideally be a script that uses the verify endpoint on the SwwipePay API to check the status of the transaction |
+| `callback`     | No       | Function that runs when a payment is successful. This should ideally be a script that uses the verify endpoint on the PaywithSwwipe API to check the status of the transaction |
 | `onClose`      | No       | JavaScript function that is called if the customer closes the payment window instead of making payment.                                                                 |
 
 
@@ -154,10 +154,10 @@ payment.open();
 
  ### Important Notes 
 
- 1. the `merchantKey` field here takes your SwwipePay **_public_**key. 
+ 1. the `merchantKey` field here takes your PaywithSwwipe **_public_**key. 
 2. The `amount` field has to be converted to the lowest currency unit by multiplying the value by `100` so if you wanted to charge** N50**, you have to multiply** 50 \* 100** and pass **5000** in the amount field.
 3. It's ideal to generate a unique `reference` from your system for every transaction to avoid duplicate attempts. 
-4. The `callback` method is called when payment has been completed successfully on the Bank3D checkout. See the next section to see how to hand the callback. 
+4. The `callback` method is called when payment has been completed successfully on the PaywithSwwipe checkout. See the next section to see how to hand the callback. 
 5. the `onClose` method is called if the user closes the modal without completing payment.
 
 ### Handling the callback method
@@ -168,7 +168,7 @@ The callback method is triggered when the transaction is completed.  This is whe
 
  Helpful Tip 
  To verify the transaction, you have to set up a route page that you pass the transaction reference to From your server, 
- you call the Swwipe verify endpoint to confirm the status of the transaction. You should then return the response to your fronted.
+ you call the PaywithSwwipe verify endpoint to confirm the status of the transaction. You should then return the response to your fronted.
 
 </Tip> 
 
@@ -185,7 +185,7 @@ callback: function(resonse){
 ### Verify the transaction status
 
 After payment is made, the next step is to confirm the status of the transaction. A  transaction can be confirmed by the verify transactions endpoint. 
-To verify the transaction, you must set up a route or page on your server that you pass the reference to. Then from your server, you calls SwwipePay verify endpoint to confirm the status of the transaction, and response is returned to your fronted. 
+To verify the transaction, you must set up a route or page on your server that you pass the reference to. Then from your server, you call the PaywithSwwipe verify endpoint to confirm the status of the transaction, and response is returned to your fronted. 
 The following parameters are needed to confirm if you should deliver value to your customer or not:
 
 | Parameter     | Description                                                                                                              |
