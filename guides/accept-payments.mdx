@@ -92,26 +92,40 @@ function payWithSwwipe(e) {
 
   e.preventDefault();
 
-  const payment = Netpay.createPayment({
-  amount: 400000,
-  
-  reference: 'YOUR_REFERENCE',
-  
-  email: 'email@email.com',
-  
-  merchantKey: 'Your-Merchant-Key',
-  
-  callback: function(response){
-  	alert(`The payment with reference ${response.reference} was successful`);
-  },
-  
-  onClose: function() {
-    alert(`The payment attempt failed`);
-  }
-  // You can find the rest of the payment options in the definition file below
-});
-payment.open();
+  // Get form data
+  const email = document.getElementById('email-address').value;
+  const amount = document.getElementById('amount').value;
+  const firstName = document.getElementById('first-name').value;
+  const lastName = document.getElementById('last-name').value;
 
+  // validate form data
+
+
+
+
+  const payment = Netpay.createPayment({
+  amount: parseInt(amount) * 100, // Convert to kobo
+    reference: generateReference(),
+    email: email,
+    merchantKey: 'Your-Merchant-Key',
+    metadata: {
+      firstName: firstName,
+      lastName: lastName
+    },
+    callback: function(response) {
+      verifyPayment(response.reference);
+    },
+    onClose: function() {
+      alert('Payment was cancelled');
+    }
+  });
+  
+  payment.open();
+
+}
+
+function generateReference() {
+  return 'txn_' + Date.now() + '_' + Math.random().toString(36).slice(2, 11);
 }
  
 
@@ -122,35 +136,6 @@ In the sample code above, notice how:
 1. The `pay` button has been tied to an `onClick` function called `payWithSwwipe`. 
 This is the action that causes SwwipePay library popup to load.
 
-
-### Initialize transaction
-
-When you have all the details needed to initiate the transaction,
- the next step is to tie them to the JavaScript function that passes them to SwwipePay and displays the checkout popup modal.
-
- ```js initialize
- // Create the payment instance
- 
-const payment = Netpay.createPayment({
-  amount: 400000,
-  
-  reference: 'YOUR_REFERENCE',
-  
-  email: 'email@email.com',
-  
-  merchantKey: 'Your-Merchant-Key',
-  
-  callback: function(response){
-  	alert(`The payment with reference ${response.reference} was successful`);
-  },
-  
-  onClose: function() {
-    alert(`The payment attempt failed`);
-  }
-  // You can find the rest of the payment options in the definition file below
-});
-payment.open();
- ```
 
  ### Important Notes 
 
@@ -172,15 +157,6 @@ The callback method is triggered when the transaction is completed.  This is whe
 
 </Tip> 
 
-In your callback function, you should make a request to your server where the verification is performed:
-
-```js callback 
-
-callback: function(resonse){
-  // make API request to your server 
-}
-
-```
 
 ### Verify the transaction status
 
@@ -201,3 +177,15 @@ The following parameters are needed to confirm if you should deliver value to yo
 > When verifying the status of a transaction, you should also verify the amount to ensure it matches the value of the service you are delivering. If the amount doesn't match, do not deliver value to the customer.
 
 </Warning> 
+
+### Security Best Practices
+
+<Warning>
+**Never expose your secret key on the frontend**. Always keep it on your server.
+</Warning>
+
+1. **Use HTTPS** for all payment pages
+2. **Validate amounts** on both frontend and backend
+3. **Store transaction logs** for audit purposes
+4. **Implement rate limiting** on verification endpoints
+5. **Use webhook endpoints** for reliable payment notifications
