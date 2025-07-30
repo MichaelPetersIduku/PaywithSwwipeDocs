@@ -137,35 +137,6 @@ In the sample code above, notice how:
 This is the action that causes SwwipePay library popup to load.
 
 
-### Initialize transaction
-
-When you have all the details needed to initiate the transaction,
- the next step is to tie them to the JavaScript function that passes them to SwwipePay and displays the checkout popup modal.
-
- ```js initialize
- // Create the payment instance
- 
-const payment = Netpay.createPayment({
-  amount: 400000,
-  
-  reference: 'YOUR_REFERENCE',
-  
-  email: 'your-email',
-  
-  merchantKey: 'Your-Merchant-Key',
-  
-  callback: function(response){
-  	alert(`The payment with reference ${response.reference} was successful`);
-  },
-  
-  onClose: function() {
-    alert(`The payment attempt failed`);
-  }
-  // You can find the rest of the payment options in the definition file below
-});
-payment.open();
- ```
-
  ### Important Notes 
 
  1. the `merchantKey` field here takes your PaywithSwwipe **_public_**key. 
@@ -186,33 +157,6 @@ The callback method is triggered when the transaction is completed.  This is whe
 
 </Tip> 
 
-In your callback function, you should make a request to your server where the verification is performed:
-
-```js callback 
-
-callback: function(resonse){
-
-   // Make request to your server for verification
-      fetch('/verify-payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ reference: response.reference })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          alert('Payment successful!');
-          // Redirect or update UI
-        } else {
-          alert('Payment verification failed');
-        }
-      });
-  
-}
-
-```
 
 ### Verify the transaction status
 
