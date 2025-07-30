@@ -36,6 +36,12 @@ property to confirm the data's integrity and origin. The following section provi
 The`HexHMACHash256` function is used to calculate the `HMAC256` hash for a given input value using the provided `MerchantSecret` key.
 It is crucial to construct the input value as the concatenation of `MerchantRef`, `CurrencyCode`, and `Amount`.
 
+### HMAC Implementation Examples
+
+The following examples show how to implement HMAC256 signature validation in different programming languages:
+
+#### C#
+
 ```csharp
 public static string HexHMACHash256(string value, string maggi) {
     // Convert the MerchantSecret key to bytes
@@ -56,5 +62,259 @@ public static string HexHMACHash256(string value, string maggi) {
 
 ```
 
+#### JavaScript/Node.js
+```javascript
+const crypto = require('crypto');
+
+function hexHMACHash256(value, merchantSecret) {
+    // Create HMAC using SHA256
+    const hmac = crypto.createHmac('sha256', merchantSecret);
+    
+    // Update with the input value
+    hmac.update(value);
+    
+    // Return the hash in hexadecimal format
+    return hmac.digest('hex');
+}
+
+// Usage example
+const merchantRef = "REF123456";
+const currencyCode = "NGN";
+const amount = "5000";
+const merchantSecret = "your_merchant_secret";
+
+const inputValue = merchantRef + currencyCode + amount;
+const signature = hexHMACHash256(inputValue, merchantSecret);
+console.log(signature);
+```
+
+#### Python
+```python
+import hmac
+import hashlib
+
+def hex_hmac_hash256(value, merchant_secret):
+    """
+    Calculate HMAC256 hash for signature validation
+    
+    Args:
+        value (str): Concatenated string of MerchantRef + CurrencyCode + Amount
+        merchant_secret (str): Your merchant secret key
+    
+    Returns:
+        str: Hexadecimal HMAC256 hash
+    """
+    # Convert strings to bytes
+    key_bytes = merchant_secret.encode('utf-8')
+    message_bytes = value.encode('utf-8')
+    
+    # Create HMAC object
+    hmac_obj = hmac.new(key_bytes, message_bytes, hashlib.sha256)
+    
+    # Return hexadecimal digest
+    return hmac_obj.hexdigest()
+
+# Usage example
+merchant_ref = "REF123456"
+currency_code = "NGN"
+amount = "5000"
+merchant_secret = "your_merchant_secret"
+
+input_value = merchant_ref + currency_code + amount
+signature = hex_hmac_hash256(input_value, merchant_secret)
+print(signature)
+```
+
+#### PHP
+```php
+<?php
+function hexHMACHash256($value, $merchantSecret) {
+    /**
+     * Calculate HMAC256 hash for signature validation
+     * 
+     * @param string $value Concatenated string of MerchantRef + CurrencyCode + Amount
+     * @param string $merchantSecret Your merchant secret key
+     * @return string Hexadecimal HMAC256 hash
+     */
+    return hash_hmac('sha256', $value, $merchantSecret);
+}
+
+// Usage example
+$merchantRef = "REF123456";
+$currencyCode = "NGN";
+$amount = "5000";
+$merchantSecret = "your_merchant_secret";
+
+$inputValue = $merchantRef . $currencyCode . $amount;
+$signature = hexHMACHash256($inputValue, $merchantSecret);
+echo $signature;
+?>
+```
+
+#### Java
+```java
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+public class SwwipeSignature {
+    
+    public static String hexHMACHash256(String value, String merchantSecret) 
+            throws NoSuchAlgorithmException, InvalidKeyException {
+        
+        // Create SecretKeySpec with merchant secret
+        SecretKeySpec secretKeySpec = new SecretKeySpec(
+            merchantSecret.getBytes(), "HmacSHA256"
+        );
+        
+        // Get Mac instance
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(secretKeySpec);
+        
+        // Compute hash
+        byte[] hashBytes = mac.doFinal(value.getBytes());
+        
+        // Convert to hexadecimal string
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hashBytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        
+        return hexString.toString();
+    }
+    
+    // Usage example
+    public static void main(String[] args) {
+        try {
+            String merchantRef = "REF123456";
+            String currencyCode = "NGN";
+            String amount = "5000";
+            String merchantSecret = "your_merchant_secret";
+            
+            String inputValue = merchantRef + currencyCode + amount;
+            String signature = hexHMACHash256(inputValue, merchantSecret);
+            System.out.println(signature);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### Go
+```go
+package main
+
+import (
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/hex"
+    "fmt"
+)
+
+// HexHMACHash256 calculates HMAC256 hash for signature validation
+func HexHMACHash256(value, merchantSecret string) string {
+    // Create HMAC hasher
+    h := hmac.New(sha256.New, []byte(merchantSecret))
+    
+    // Write the input value
+    h.Write([]byte(value))
+    
+    // Get the hash and convert to hex string
+    return hex.EncodeToString(h.Sum(nil))
+}
+
+func main() {
+    merchantRef := "REF123456"
+    currencyCode := "NGN"
+    amount := "5000"
+    merchantSecret := "your_merchant_secret"
+    
+    inputValue := merchantRef + currencyCode + amount
+    signature := HexHMACHash256(inputValue, merchantSecret)
+    fmt.Println(signature)
+}
+```
+
+#### Ruby
+```ruby
+require 'openssl'
+
+def hex_hmac_hash256(value, merchant_secret)
+  # Calculate HMAC256 hash for signature validation
+  #
+  # @param value [String] Concatenated string of MerchantRef + CurrencyCode + Amount
+  # @param merchant_secret [String] Your merchant secret key
+  # @return [String] Hexadecimal HMAC256 hash
+  
+  OpenSSL::HMAC.hexdigest('SHA256', merchant_secret, value)
+end
+
+# Usage example
+merchant_ref = "REF123456"
+currency_code = "NGN"
+amount = "5000"
+merchant_secret = "your_merchant_secret"
+
+input_value = merchant_ref + currency_code + amount
+signature = hex_hmac_hash256(input_value, merchant_secret)
+puts signature
+```
+
+### Signature Validation Process
+
+To validate a signature received from SwwipePay:
+
+1. **Extract the parameters** from the response: `MerchantRef`, `CurrencyCode`, `Amount`
+2. **Concatenate the values** in the exact order: `MerchantRef + CurrencyCode + Amount`
+3. **Calculate the HMAC** using your merchant secret key
+4. **Compare the calculated hash** with the received HMAC property
+5. **Process the transaction** only if the signatures match
+
+```javascript
+// Example validation in Node.js
+function validateSignature(receivedHMAC, merchantRef, currencyCode, amount, merchantSecret) {
+    const inputValue = merchantRef + currencyCode + amount;
+    const calculatedHMAC = hexHMACHash256(inputValue, merchantSecret);
+    
+    return receivedHMAC === calculatedHMAC;
+}
+
+
+// Usage
+const isValid = validateSignature(
+    receivedResponse.hmac,
+    receivedResponse.merchantRef,
+    receivedResponse.currencyCode,
+    receivedResponse.amount,
+    process.env.MERCHANT_SECRET
+);
+
+if (isValid) {
+    // Process the transaction
+    console.log("Signature is valid, processing transaction...");
+} else {
+    // Reject the transaction
+    console.log("Invalid signature, rejecting transaction");
+}
+```
+
+
+
 In the provided function, `value` should be constructed as the concatenation of`MerchantRef`, `CurrencyCode`, and `Amount`, while `maggi` represents the MerchantSecret key. 
 By calling this function and comparing the result with the HMAC property received from SwwipePay, you can ensure the authenticity and integrity of the data before proceeding with transaction processing.
+
+### Security Notes
+
+<Warning>
+- Always keep your merchant secret secure and never expose it in client-side code
+- Validate signatures for all responses
+- Use constant-time comparison when validating signatures to prevent timing attacks
+- Store your merchant secret in environment variables or secure configuration
+</Warning>
+
